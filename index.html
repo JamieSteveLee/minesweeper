@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- <script src="https://use.fontawesome.com/d5895a3b55.js"></script> -->
+		<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+		<link rel="stylesheet" href="styles.min.css" type="text/css" />
+
+		<title>Minesweeper</title>
+	</head>
+	<body>
+		<div id="vm">
+			<header>
+				Remaining: {{safeRemaining}}
+			</header>
+			<main :style="{ height: windowHeight }">
+				<div class="grid" :style="{'max-width': gridMaxWidth + 'px'}" v-if="squareData.length">
+					<div class="square"
+						v-for="(square, index) in squareData"
+						:class="{
+							'clicked': square.clicked,
+							'flagged': square.flagged,
+							'mine': square.clicked && square.hasMine,
+							'wrong-flag': gameOver && square.flagged && !square.hasMine
+						}"
+						:style="{
+							width: squareWidth + '%',
+							'padding-bottom': 'calc(' + squareWidth + '% - 2px)'
+						}"
+						@click="clickSquare(index)"
+						@contextmenu.prevent="rightClickSquare(index)"
+					>
+					<div v-if="square.surroundingMines">{{square.surroundingMines}}</div>
+					</div>
+				</div>
+			</main>
+		</div>
+		<script type="text/javascript" src="scripts.min.js"></script>
+	</body>
+</html>

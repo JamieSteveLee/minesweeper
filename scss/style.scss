@@ -1,0 +1,86 @@
+@mixin noselect {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+$bkgd-color: #2f4f4e;
+
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+html {
+	box-sizing: border-box;
+}
+body {
+	margin: 0;
+	font-family: arial;
+}
+
+header {
+	height: 50px;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: 1;
+	background: $bkgd-color;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	padding: 10px 11px;
+}
+main {
+	padding-top: 50px;
+	background: #eee;
+	overflow: auto;
+}
+
+#vm {
+	overflow: auto;
+}
+
+.grid {
+	margin: 0 auto;
+	border: 10px solid #bbb;
+	overflow: hidden;
+
+	.square {
+		background: #d2d2d2;
+		border: 1px solid #aaa;
+		float: left;
+		position: relative;
+		cursor: pointer;
+		@include noselect;
+
+		&.clicked {
+			background: #eee;
+
+			&.mine {
+				background: #000;
+
+				&.flagged {
+					background: #00d;
+				}
+			}
+		}
+		&.flagged {
+			background: #663399;
+
+			&.wrong-flag {
+				background: #d00;
+			}
+		}
+
+		>div {
+			position: absolute;
+			display: flex;
+			top: 0;
+			right: 0px;
+			bottom: 0;
+			left: 0;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+}

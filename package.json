@@ -1,0 +1,21 @@
+{
+  "name": "minesweeper",
+  "version": "0.0.1",
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-uglify": "^2.1.2"
+  },
+  "description": "## Setup Requires [Node.js](https://nodejs.org/en/download/) 1. Rename main directory, and change `\"name\"` in `package.json` 3. In terminal, navigate to main directory 4. `npm init` 5. `npm install`",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {}
+}
