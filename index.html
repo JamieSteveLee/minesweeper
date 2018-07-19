@@ -13,7 +13,22 @@
 	<body>
 		<div id="vm">
 			<header>
-				Remaining: {{safeRemaining}}
+				<div class="header-inner">
+					<div>{{safeRemaining}}</div>
+					<div>
+						<div class="button" @click="newGame()">
+							New game
+						</div>
+					</div>
+					<div>
+						<div class="button" @click="showOptions(false)" v-if="optionsOpen">
+							Back
+						</div>
+						<div class="button" @click="showOptions()" v-else>
+							Options
+						</div>
+					</div>
+				</div>
 			</header>
 			<main :style="{ height: windowHeight }">
 				<div class="grid" :style="{'max-width': gridMaxWidth + 'px'}" v-if="squareData.length">
@@ -27,7 +42,8 @@
 						}"
 						:style="{
 							width: squareWidth + '%',
-							'padding-bottom': 'calc(' + squareWidth + '% - 2px)'
+							'padding-bottom': 'calc(' + squareWidth + '% - 1px)',
+							color: getColor(square.surroundingMines)
 						}"
 						@click="clickSquare(index)"
 						@contextmenu.prevent="rightClickSquare(index)"
@@ -36,6 +52,22 @@
 					</div>
 				</div>
 			</main>
+			<div class="page-options" :class="{'options-open': this.optionsOpen}">
+				<div class="options-inner">
+					<h2>Options</h2>
+
+					<label>Grid Width:</label>
+					<input type="number" v-model="data_options.gridWidth" />
+
+					<label>Grid Height:</label>
+					<input type="number" v-model="data_options.gridHeight" />
+
+					<label>Number of Mines:</label>
+					<input type="number" v-model="data_options.totalMines" />
+
+					<div class="button" @click="newGame()">New Game</div>
+				</div>
+			</div>
 		</div>
 		<script type="text/javascript" src="scripts.min.js"></script>
 	</body>

@@ -1,14 +1,20 @@
 var vm = new Vue({
 	el: '#vm',
 	data: {
-		gridWidth: 10,
-		gridHeight: 20,
+		gridWidth: 16,
+		gridHeight: 16,
 		totalMines: 40,
 		squareData: [],
 		windowHeight: 0,
 		firstClick: true,
 		gameOver: false,
-		safeRemaining: 0
+		safeRemaining: 0,
+		optionsOpen: false,
+		data_options: {
+			gridWidth: 16,
+			gridHeight: 16,
+			totalMines: 40
+		}
 	},
 	computed: {
 		totalSquares: function() {
@@ -21,7 +27,7 @@ var vm = new Vue({
 			return 100 / this.gridWidth;
 		},
 		gridMaxWidth: function() {
-			return this.gridWidth * 50;
+			return this.gridWidth * 25;
 		}
 	},
 	methods: {
@@ -30,8 +36,9 @@ var vm = new Vue({
 				this.squareData[thisNumber].clicked = true;
 
 				if(this.squareData[thisNumber].hasMine) {
+
 					if(this.firstClick) {
-						this.newGame();
+						this.newGame(true);
 						this.clickSquare(thisNumber);
 					} else {
 						if(!this.gameOver) {
@@ -77,6 +84,7 @@ var vm = new Vue({
 			}
 		},
 		getNeighbours: function(thisNumber) {
+
 			var neighbours = [];
 			// top
 			if(thisNumber >= this.gridWidth) {
@@ -108,27 +116,51 @@ var vm = new Vue({
 			}
 			return neighbours;
 		},
-		newGame: function() {
-			this.squareData = [];
-			this.gameOver = false;
-			this.firstClick = true;
+		newGame: function(noConfirm = false) {
 
-			for (var i = 0; i < this.totalSquares; i++) {
-				var thisSquareData = {
-					surroundingMines: 0,
-					clicked: false,
-					hasMine: false,
-					flagged: false
-				};
-				if(i < this.totalMines) {
-					thisSquareData.hasMine = 1;
-				}
-
-				this.safeRemaining = this.totalSquares - this.totalMines;
-				this.squareData.push(thisSquareData);
+			if (noConfirm || this.gameOver) {
+				var confirmNewGame = true;
+			} else {
+				var confirmNewGame = confirm('Start a new game?');
 			}
 
-			this.shuffle(this.squareData);
+			if(confirmNewGame) {
+				this.squareData = [];
+				this.gameOver = false;
+				this.firstClick = true;
+				this.gridWidth = parseInt(this.data_options.gridWidth);
+				this.gridHeight = parseInt(this.data_options.gridHeight);
+				this.totalMines = parseInt(this.data_options.totalMines);
+
+				for (var i = 0; i < this.totalSquares; i++) {
+					var thisSquareData = {
+						surroundingMines: 0,
+						clicked: false,
+						hasMine: false,
+						flagged: false
+					};
+					if(i < this.totalMines) {
+						thisSquareData.hasMine = 1;
+					}
+
+					this.safeRemaining = this.totalSquares - this.totalMines;
+					this.squareData.push(thisSquareData);
+				}
+
+				this.shuffle(this.squareData);
+				this.showOptions(false);
+			}
+		},
+		showOptions: function(show = true) {
+			this.data_options.gridWidth = parseInt(this.gridWidth);
+			this.data_options.gridHeight = parseInt(this.gridHeight);
+			this.data_options.totalMines = parseInt(this.totalMines);
+
+			if(show) {
+				this.optionsOpen = true;
+			} else {
+				this.optionsOpen = false;
+			}
 		},
 		getSurroundingMines: function(neighboursArray) {
 			var totalMines = 0;
@@ -143,6 +175,34 @@ var vm = new Vue({
 				if(this.squareData[i].hasMine) {
 					this.squareData[i].clicked = true;
 				}
+			}
+		},
+		getColor: function(numberOfMines) {
+			switch(numberOfMines) {
+				case 1 :
+					return '#00f';
+					break;
+				case 2 :
+					return '#007b00';
+					break;
+				case 3 :
+					return '#f00';
+					break;
+				case 4 :
+					return '#00007b';
+					break;
+				case 5 :
+					return '#700';
+					break;
+				case 6 :
+					return '#007b7a';
+					break;
+				case 7 :
+					return '#000';
+					break;
+				case 8 :
+					return '#7b7b7b';
+					break;
 			}
 		},
 		shuffle: function(array) {
@@ -161,7 +221,7 @@ var vm = new Vue({
 		}
 	},
 	beforeMount() {
-		this.newGame();
+		this.newGame(true);
 	},
 	mounted() {
 		this.$nextTick(function() {
